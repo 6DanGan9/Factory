@@ -53,6 +53,17 @@ namespace Factory
             }
         }
 
+        internal void SetNumber(int number)
+        {
+            Number = number;
+        }
+
+        public void Start()
+        {
+            Console.WriteLine($"Task №{Number} has been pnanned");
+            TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
+        }
+
         public void Initialization()
         {
             foreach (var numbeTask in NumbersNeededTasks)
@@ -68,6 +79,7 @@ namespace Factory
                     }
                 }
             }
+            
         }
 
         private void ExpectedTaskComplite(object? sender, TaskEventDescriptor e)
@@ -80,16 +92,18 @@ namespace Factory
         {
             if (ExpectedTasks.Count == 0)
             {
-                StartPlanning();
                 Console.WriteLine($"Task №{Number} start pnannig");
-                TaskStartPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
+                StartPlanning();
             }
         }
 
         private void StartPlanning()
         {
             Console.WriteLine($"Task №{Number} has been pnanned");
+            if (TaskEndPlanning != null)
+            {
             TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Factory
     internal static class Factory
     {
         public static List<Worker> Workers = new();
+        private static Task StartTask = new();
         public static List<Task> Tasks = new();
         public static List<Workbench> Workbenches = new();
 
@@ -18,11 +20,13 @@ namespace Factory
             CreateTasksList();
             CreateWorkersList();
             CreateWorkbenchesList();
-            StartPlanning();
+            Start();
         }
 
         private static void CreateTasksList()
         {
+            StartTask.SetNumber(0);
+            Tasks.Add(StartTask);
             ExcelHelper excel = new();
             excel.Open("Tasks");
             int row = 2;
@@ -39,16 +43,16 @@ namespace Factory
 
         private static void CreateWorkersList()
         {
-            //ExcelHelper excel = new();
-            //excel.Open("Workers");
-            //int row = 2;
-            //while (excel.Get(row, 1) != "")
-            //{
-            //    Worker worker = new(excel, row);
-            //    Workers.Add(worker);
-            //    row++;
-            //}
-            //excel.Close();
+            ExcelHelper excel = new();
+            excel.Open("Workers");
+            int row = 2;
+            while (excel.Get(row, 1) != "")
+            {
+                Worker worker = new(excel, row);
+                Workers.Add(worker);
+                row++;
+            }
+            excel.Close();
         }
 
         private static void CreateWorkbenchesList()
@@ -66,11 +70,9 @@ namespace Factory
         }
 
 
-        private static void StartPlanning()
+        private static void Start()
         {
-            foreach (var task in Tasks)
-                if (task.NeededTasks.Count == 0)
-                    task.
+            StartTask.Start();
         }
     }
 }
