@@ -7,7 +7,6 @@ namespace Factory
         static void Main(string[] args)
         {
             Factory.CreateSchedule();
-
         }
     }
 }

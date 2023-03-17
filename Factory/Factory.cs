@@ -57,16 +57,16 @@ namespace Factory
 
         private static void CreateWorkbenchesList()
         {
-            //ExcelHelper excel = new();
-            //excel.Open("Workbenches");
-            //int row = 2;
-            //while (excel.Get(row, 1) != "")
-            //{
-            //    Workbench workbench = new(excel, row);
-            //    Workbenches.Add(workbench);
-            //    row++;
-            //}
-            //excel.Close();
+            ExcelHelper excel = new();
+            excel.Open("Workbenches");
+            int row = 2;
+            while (excel.Get(row, 1) != "")
+            {
+                Workbench workbench = new(excel, row);
+                Workbenches.Add(workbench);
+                row++;
+            }
+            excel.Close();
         }
 
 

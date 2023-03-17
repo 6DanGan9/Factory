@@ -12,8 +12,6 @@ namespace Factory
         public string Name { get; private set; }
         public double Efficiency { get; private set; }
         public Specialization Specialization { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
         public List<TaskToWork> Tasks = new();
         public List<DateTime> Dates = new();
 
@@ -32,13 +30,13 @@ namespace Factory
                 if (number > 0)
                 {
                     date = dates.Substring(0, number);
-                    date += "/03/2023";
+                    date += "/03/2023 8:00:00";
                     dates = dates.Substring(number + 1);
                 }
                 else
                 {
                     date = dates;
-                    date += "/03/2023";
+                    date += "/03/2023 8:00:00";
                     dates = "";
                 }
                 Dates.Add(DateTime.Parse(date));
