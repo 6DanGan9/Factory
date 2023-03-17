@@ -1,10 +1,13 @@
-﻿namespace Factory
+﻿using System.Threading.Tasks;
+
+namespace Factory
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Factory.CreateSchedule();
+
         }
     }
 }
