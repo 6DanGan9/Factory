@@ -18,5 +18,13 @@ namespace Factory
             Name = name;
             Complexity = complexity;
         }
+
+        public bool CanUsed(Specialization spec)
+        {
+            if (spec.Name == Name && spec.Complexity >= Complexity)
+                return true;
+            else
+                return false;
+        }
     }
 }

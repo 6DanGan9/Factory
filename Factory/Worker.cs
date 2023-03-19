@@ -11,6 +11,7 @@ namespace Factory
     {
         public string Name { get; private set; }
         public double Efficiency { get; private set; }
+        public DateTime LastTime { get; private set; }
         public Specialization Specialization { get; private set; }
         public List<TaskToWork> Tasks = new();
         public List<DateTime> Dates = new();

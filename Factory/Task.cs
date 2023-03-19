@@ -79,7 +79,7 @@ namespace Factory
                     }
                 }
             }
-            
+
         }
 
         private void ExpectedTaskComplite(object? sender, TaskEventDescriptor e)
@@ -92,18 +92,45 @@ namespace Factory
         {
             if (ExpectedTasks.Count == 0)
             {
-                Console.WriteLine($"Task №{Number} start pnannig");
                 StartPlanning();
             }
         }
 
         private void StartPlanning()
         {
+            Console.WriteLine($"Task №{Number} start pnannig");
+
+            List<Worker> workers = CreateWorkersList();
+            List<Workbench> workbenches = CreateWorkbanchesList();
+
+
             Console.WriteLine($"Task №{Number} has been pnanned");
             if (TaskEndPlanning != null)
             {
-            TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
+                TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
             }
+        }
+
+        private List<Worker> CreateWorkersList()
+        {
+            List<Worker> workers = new();
+            foreach (var worker in Factory.Workers)
+            {
+                if (NeededSpecialization.CanUsed(worker.Specialization))
+                    workers.Add(worker);
+            }
+            return workers;
+        }
+
+        private List<Workbench> CreateWorkbanchesList()
+        {
+            List<Workbench> workbenches = new();
+            foreach (var workbench in Factory.Workbenches)
+            {
+                if (NeededWorkdench == workbench.Name)
+                    workbenches.Add(workbench);
+            }
+            return workbenches;
         }
     }
 }

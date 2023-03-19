@@ -11,6 +11,8 @@ namespace Factory
     {
         public string Name { get; private set; }
         public double WorkBoost { get; private set; }
+        public List<DateTime> Dates = new();
+        public List<TaskToWork> Tasks = new();
 
         public Workbench() { }
 
@@ -18,6 +20,12 @@ namespace Factory
         {
             Name = excel.Get(row, 1);
             WorkBoost = Convert.ToDouble(excel.Get(row, 2));
+            for (int i = 0; i < 20; i++)
+            {
+                string date;
+                date = Convert.ToString(i) + "/03/2023 8:00:00";
+                Dates.Add(DateTime.Parse(date));
+            }
         }
     }
 }

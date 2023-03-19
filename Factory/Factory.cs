@@ -1,4 +1,5 @@
 ﻿using Excel;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Factory
         private static Task StartTask = new();
         public static List<Task> Tasks = new();
         public static List<Workbench> Workbenches = new();
+        public static TimeSpan WorkingDayLength = TimeSpan.FromHours(10);
 
         public static void CreateSchedule()
         {
