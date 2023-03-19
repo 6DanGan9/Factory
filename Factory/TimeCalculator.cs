@@ -15,6 +15,16 @@ namespace Factory
             int neededWorkersCount = 0;
             double summEfficiency = 0;
             double summProgress = 0;
+            if (workers.Count == 0)
+            {
+                Console.WriteLine("Error: workers.count = 0");
+                return TimeSpan.Zero;
+            }
+            else if(workers.Count == 1)
+            {
+                timeToCompliteTask = TimeSpan.FromHours(task.LaborIntensity / (workers[0].Efficiency * workbench.WorkBoost));
+                return timeToCompliteTask;
+            }
             var sortedWorkers = workers.OrderBy(x => x.LastTime);
             workers.Clear();
             foreach (var worker in sortedWorkers)
@@ -46,7 +56,7 @@ namespace Factory
                 return worker2.LastTime - worker1.LastTime;
             else
             {
-                int days = 0;
+                int days;
                 DateTime Day1 = new();
                 foreach (var day in worker1.Dates)
                     if (worker1.LastTime.Day == day.Day)
