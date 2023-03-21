@@ -10,5 +10,13 @@ namespace Factory
     {
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+
+        public TaskToWork() { }
+
+        public TaskToWork(DateTime startTime, DateTime endTime)
+        {
+            StartTime = startTime;
+            EndTime = endTime;
+        }
     }
 }

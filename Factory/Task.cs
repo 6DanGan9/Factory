@@ -102,6 +102,11 @@ namespace Factory
 
             List<Worker> workers = CreateWorkersList();
             List<Workbench> workbenches = CreateWorkbanchesList();
+            var sortedWorkers = workers.OrderBy(x => x.LastTime);
+            workers.Clear();
+            foreach (var worker in sortedWorkers)
+                workers.Add(worker);
+
 
 
             Console.WriteLine($"Task №{Number} has been pnanned");

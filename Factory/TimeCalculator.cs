@@ -25,10 +25,6 @@ namespace Factory
                 timeToCompliteTask = TimeSpan.FromHours(task.LaborIntensity / (workers[0].Efficiency * workbench.WorkBoost));
                 return timeToCompliteTask;
             }
-            var sortedWorkers = workers.OrderBy(x => x.LastTime);
-            workers.Clear();
-            foreach (var worker in sortedWorkers)
-                workers.Add(worker);
             for (int i = 0; i < workers.Count - 1; i++)
             {
                 summEfficiency += workers[i].Efficiency * workbench.WorkBoost;

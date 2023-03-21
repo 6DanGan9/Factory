@@ -11,6 +11,7 @@ namespace Factory
     {
         public string Name { get; private set; }
         public double WorkBoost { get; private set; }
+        public DateTime LastTime { get; private set; }
         public List<DateTime> Dates = new();
         public List<TaskToWork> Tasks = new();
 
