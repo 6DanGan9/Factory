@@ -12,6 +12,9 @@ namespace Factory.Objects
     {
         public string Name { get; private set; }
         public double WorkBoost { get; private set; }
+        /// <summary>
+        /// Минимальное время, начиная с которого будет свободен.
+        /// </summary>
         public DateTime LastTime { get { return Tasks.Last().EndTime; } }
         public List<DateTime> Dates = new();
         public List<TaskToWork> Tasks = new();
@@ -30,7 +33,9 @@ namespace Factory.Objects
             }
             Tasks.Add(new(0, Dates[0], Dates[0]));
         }
-
+        /// <summary>
+        /// Принимает таску для выполнения.
+        /// </summary>
         internal void AcceptTask(Task task)
         {
             TaskToWork subTask = new(task.Number, LastTime, task.EndTime);

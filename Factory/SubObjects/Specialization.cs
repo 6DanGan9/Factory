@@ -18,7 +18,9 @@ namespace Factory.SubObjects
             Name = name;
             Complexity = complexity;
         }
-
+        /// <summary>
+        /// Проверяет, подходит ли рабочий для таски.
+        /// </summary>
         public bool CanUsed(Specialization spec)
         {
             if (spec.Name == Name && spec.Complexity >= Complexity)

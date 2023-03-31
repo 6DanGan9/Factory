@@ -11,8 +11,12 @@ namespace Factory.Utilities
 {
     internal static class TimeCalculator
     {
+        /// <summary>
+        /// Принимает время начала, длительность выполнения, и расписание рабочего, возвращает время, когда он закончит.
+        /// </summary>
         public static DateTime DateEndWork(DateTime start, TimeSpan timeToWork, List<DateTime> Dates)
         {
+            //Находим день, проверяем, успеет ли выполнить заказ рабочий в этот же день, если нет, то вычитаем этотдень и считаем пока на закончиться время.
             for (int i = 0; i < Dates.Count; i++)
                 if (Dates[i].Day == start.Day)
                 {
@@ -36,8 +40,12 @@ namespace Factory.Utilities
                 }
             return DateTime.MinValue;
         }
+        /// <summary>
+        /// Возвращает момент времени, в который рабочий сможет выполнить заказ.
+        /// </summary>
         public static DateTime CalcDateOfEndTask(Task task, Worker worker, Workbench workbench)
         {
+            //Находим время, когда таска сможет начать выполнение.
             task.CalcStartTime();
             if (task.StartTime < worker.LastTime)
             {

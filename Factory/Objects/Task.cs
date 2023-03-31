@@ -12,12 +12,26 @@ namespace Factory.Objects
     {
         public string Name { get; set; }
         public int Number { get; private set; }
+        /// <summary>
+        /// Объём работ.
+        /// </summary>
         public double LaborIntensity { get; private set; }
+        /// <summary>
+        /// Максимальное кол-во рабочих на таске.
+        /// </summary>
         public int MaxCountWorkers { get; private set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        /// <summary>
+        /// Время, на которое может сместиться таска.
+        /// </summary>
         public TimeSpan FreeTime { get; set; }
+        /// <summary>
+        /// Рабочий, выполняющий таску.
+        /// </summary>
         public Worker Worker { get; set; }
+        //необходимая специальность и квалифицированность рабочего.
+        public Specialization NeededSpecialization = new();
         public string NeededWorkdench { get; set; }
 
         public bool IsPlanned = false;
@@ -25,7 +39,6 @@ namespace Factory.Objects
         private List<int> NumbersNeededTasks = new();
         public List<Task> NextTasks = new();
         private List<int> NumbersNextTasks = new();
-        public Specialization NeededSpecialization = new();
 
         public Task()
         {
@@ -77,7 +90,9 @@ namespace Factory.Objects
         {
             Number = number;
         }
-
+        /// <summary>
+        /// Начальноя настройка таски создание печечня предшествующих и последующих тасок.
+        /// </summary>
         public void Initialization()
         {
             if (NumbersNeededTasks.Count == 0)
@@ -108,7 +123,9 @@ namespace Factory.Objects
                 }
             }
         }
-
+        /// <summary>
+        /// Проверяет, все ли предшествующие таски запланированы.
+        /// </summary>
         public bool CanStartPlanning()
         {
             foreach (var task in NeededTasks)
@@ -118,7 +135,9 @@ namespace Factory.Objects
             }
             return true;
         }
-
+        /// <summary>
+        /// Ищет наименьшее время, в которое может начаться выполнение.
+        /// </summary>
         internal void CalcStartTime()
         {
             StartTime = Factory.StartDate;

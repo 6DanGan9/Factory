@@ -11,28 +11,39 @@ namespace Factory.Objects
 {
     internal static class TaskAgent
     {
+        /// <summary>
+        /// Планирование заказа
+        /// </summary>
         public static void TaskPlanning(Task task)
         {
+            //Если таска может начать планироваться, то планируем.
             if (task.CanStartPlanning())
                 StartPlanning(task);
             else
             {
+                //Планируем не запланированные педшествующие таски.
                 foreach (var subtask in task.NeededTasks)
+                    if(!subtask.IsPlanned)
                     TaskPlanning(subtask);
                 StartPlanning(task);
             }
+            //Считаем возможное смезение для предшествующих тасок.
             foreach (var subtask in task.NeededTasks)
             {
                 subtask.FreeTime = task.StartTime - subtask.EndTime;
             }
         }
-
+        /// <summary>
+        /// Алгоритм нахождения места для планирования.
+        /// </summary>
         public static void StartPlanning(Task task)
         {
-            if (task.Number == int.MaxValue)
+            //Если это закрывающая таска, значит планирование окончено.
+            if (task == Factory.EndTask)
                 return;
             List<Worker> workers = CreateWorkersList(task);
             Workbench workbench = SearchWorkbench(task);
+            //Ищем рабочего, который раньше закончит выполнять таску.
             task.Worker = workers[0];
             DateTime minDate = TimeCalculator.CalcDateOfEndTask(task, workers[0], workbench);
             for (int i = 1; i < workers.Count; i++)
@@ -43,17 +54,16 @@ namespace Factory.Objects
                     task.Worker = workers[i];
                 }
             }
+            //Добавляем таску рабочему и столу.
             task.EndTime = minDate;
             task.Worker.AcceptTask(task);
             workbench.AcceptTask(task);
             Console.WriteLine($"{task.Name}, время выполнения ({task.StartTime} - {task.EndTime}) будет выполнять {task.Worker.Name} на рабочем столе:{task.NeededWorkdench}.\n");
-            foreach(var subtask in task.NeededTasks)
-            {
-                subtask.FreeTime = task.StartTime - subtask.EndTime;
-            }
             task.IsPlanned = true;
         }
-
+        /// <summary>
+        /// Создаёт список рабочих, способных выполнить таску.
+        /// </summary>
         private static List<Worker> CreateWorkersList(Task task)
         {
             List<Worker> workers = new();
@@ -64,7 +74,9 @@ namespace Factory.Objects
             }
             return workers;
         }
-
+        /// <summary>
+        /// Ищет рабочий стол для таски
+        /// </summary>
         private static Workbench SearchWorkbench(Task task)
         {
             foreach (var workbench in Factory.Workbenches)

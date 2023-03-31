@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Factory.SubObjects
 {
+    /// <summary>
+    /// Вспомогательная таска для заполнения расписания ресурсов.
+    /// </summary>
     internal class TaskToWork
     {
         public int TaskNumber { get; set; }

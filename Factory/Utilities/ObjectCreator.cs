@@ -11,6 +11,9 @@ namespace Factory
 {
     internal static class ObjectCreator
     {
+        /// <summary>
+        /// Считывает список тасок из Excel.
+        /// </summary>
         public static void CreateTasksList()
         {
             List<Task> Tasks = new();
@@ -33,7 +36,9 @@ namespace Factory
             for (int i = 1; i < Tasks.Count - 1; i++)
                 Tasks[i].Initialization();
         }
-
+        /// <summary>
+        /// Считывает список рабочих из Excel.
+        /// </summary>
         public static void CreateWorkersList()
         {
             ExcelHelper excel = new();
@@ -47,7 +52,9 @@ namespace Factory
             }
             excel.Close();
         }
-
+        /// <summary>
+        /// Считывает список рабочих мест из Excel.
+        /// </summary>
         public static void CreateWorkbenchesList()
         {
             ExcelHelper excel = new();
