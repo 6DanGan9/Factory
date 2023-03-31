@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Exxcel = Microsoft.Office.Interop.Excel;
 
-namespace Excel
+namespace Factory.Utilities
 {
     internal class ExcelHelper : IDisposable
     {
@@ -14,7 +14,7 @@ namespace Excel
         private Application _excel;
         private Workbook _workbook;
 
-        public ExcelHelper() { _excel = new Exxcel.Application(); }
+        public ExcelHelper() { _excel = new Application(); }
 
 
         internal void Open(string filePath)
@@ -24,7 +24,7 @@ namespace Excel
 
         internal void Set(int row, int column, object data)
         {
-            ((Exxcel.Worksheet)_excel.ActiveSheet).Cells[row, ColumnToString(column)] = Convert.ToString(data);
+            ((Worksheet)_excel.ActiveSheet).Cells[row, ColumnToString(column)] = Convert.ToString(data);
         }
 
         internal string Get(int row, int column)

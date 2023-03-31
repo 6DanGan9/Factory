@@ -1,11 +1,11 @@
-﻿using Excel;
+﻿using Factory.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Objects
 {
     internal class Worker
     {
@@ -54,7 +54,7 @@ namespace Factory
 
         private DateTime DateEnd(DateTime start, TimeSpan timeToWork)
         {
-            for(int i = 0; i < Dates.Count; i++)
+            for (int i = 0; i < Dates.Count; i++)
                 if (Dates[i].Day == start.Day)
                 {
                     if (Dates[i] + Factory.WorkingDayLength - start >= timeToWork)

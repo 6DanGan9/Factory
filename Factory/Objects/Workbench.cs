@@ -1,11 +1,11 @@
-﻿using Excel;
+﻿using Factory.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Objects
 {
     internal class Workbench
     {
@@ -21,7 +21,7 @@ namespace Factory
         {
             Name = excel.Get(row, 1);
             WorkBoost = Convert.ToDouble(excel.Get(row, 2));
-            for (int i = 0; i < 20; i++)
+            for (int i = 1; i <= 20; i++)
             {
                 string date;
                 date = Convert.ToString(i) + "/03/2023 8:00:00";

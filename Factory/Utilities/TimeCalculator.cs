@@ -1,11 +1,13 @@
-﻿using Microsoft.Office.Interop.Excel;
+﻿using Factory.Objects;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Task = Factory.Objects.Task;
 
-namespace Factory
+namespace Factory.Utilities
 {
     internal static class TimeCalculator
     {
@@ -20,7 +22,7 @@ namespace Factory
                 Console.WriteLine("Error: workers.count = 0");
                 return TimeSpan.Zero;
             }
-            else if(workers.Count == 1)
+            else if (workers.Count == 1)
             {
                 timeToCompliteTask = TimeSpan.FromHours(task.LaborIntensity / (workers[0].Efficiency * workbench.WorkBoost));
                 return timeToCompliteTask;
@@ -28,7 +30,7 @@ namespace Factory
             for (int i = 0; i < workers.Count - 1; i++)
             {
                 summEfficiency += workers[i].Efficiency * workbench.WorkBoost;
-                summProgress += summEfficiency * (TimeToWork(workers[i], workers[i + 1])).TotalHours;
+                summProgress += summEfficiency * TimeToWork(workers[i], workers[i + 1]).TotalHours;
                 if (summProgress > task.LaborIntensity)
                 {
                     neededWorkersCount = i;
@@ -46,7 +48,7 @@ namespace Factory
             return timeToCompliteTask;
         }
 
-        private static TimeSpan TimeToWork (Worker worker1, Worker worker2)
+        private static TimeSpan TimeToWork(Worker worker1, Worker worker2)
         {
             if (worker1.LastTime.Day == worker2.LastTime.Day)
                 return worker2.LastTime - worker1.LastTime;
@@ -64,7 +66,7 @@ namespace Factory
                         Day2 = day;
                 TimeSpan timeFromStartDay = worker2.LastTime - Day2;
                 days = worker2.LastTime.Day - worker1.LastTime.Day - 1;
-                TimeSpan timeToWork = timeToEndDay + (days * Factory.WorkingDayLength) + timeFromStartDay;
+                TimeSpan timeToWork = timeToEndDay + days * Factory.WorkingDayLength + timeFromStartDay;
                 return timeToWork;
             }
         }

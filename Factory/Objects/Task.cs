@@ -1,11 +1,11 @@
-﻿using Excel;
+﻿using Factory.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Objects
 {
     internal class Task
     {
@@ -14,14 +14,15 @@ namespace Factory
         public int MaxCountWorkers { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+        public TimeSpan FreeTime { get; set; }
         public List<Task> NeededTasks = new();
         private List<int> NumbersNeededTasks = new();
+        public List<Task> NextTasks = new();
+        private List<int> NumbersNextTasks = new();
         public List<Task> ExpectedTasks = new();
         public Specialization NeededSpecialization = new();
         public string NeededWorkdench;
 
-
-        public event EventHandler<TaskEventDescriptor> TaskStartPlanning;
         public event EventHandler<TaskEventDescriptor> TaskEndPlanning;
 
         public Task()
@@ -34,22 +35,38 @@ namespace Factory
             NeededWorkdench = excel.Get(row, 4);
             LaborIntensity = Convert.ToDouble(excel.Get(row, 5));
             NeededSpecialization = new(excel.Get(row, 6), Convert.ToDouble(excel.Get(row, 7)));
-            string tasks = excel.Get(row, 8);
+            string neededTasks = excel.Get(row, 8);
             int taskNumber;
-            while (tasks.Length > 0)
+            while (!string.IsNullOrEmpty(neededTasks))
             {
-                int number = tasks.IndexOf(',');
+                int number = neededTasks.IndexOf(',');
                 if (number > 0)
                 {
-                    taskNumber = Convert.ToInt32(tasks.Substring(0, number));
-                    tasks = tasks.Substring(number + 1);
+                    taskNumber = Convert.ToInt32(neededTasks.Substring(0, number));
+                    neededTasks = neededTasks.Substring(number + 1);
                 }
                 else
                 {
-                    taskNumber = Convert.ToInt32(tasks);
-                    tasks = "";
+                    taskNumber = Convert.ToInt32(neededTasks);
+                    neededTasks = string.Empty;
                 }
                 NumbersNeededTasks.Add(taskNumber);
+            }
+            string nextTasks = excel.Get(row, 9);
+            while (!string.IsNullOrEmpty(nextTasks))
+            {
+                int number = nextTasks.IndexOf(',');
+                if (number > 0)
+                {
+                    taskNumber = Convert.ToInt32(nextTasks.Substring(0, number));
+                    nextTasks = nextTasks.Substring(number + 1);
+                }
+                else
+                {
+                    taskNumber = Convert.ToInt32(nextTasks);
+                    nextTasks = string.Empty;
+                }
+                NumbersNextTasks.Add(taskNumber);
             }
         }
 
@@ -66,37 +83,44 @@ namespace Factory
 
         public void Initialization()
         {
-            foreach (var numbeTask in NumbersNeededTasks)
+            if (NumbersNeededTasks.Count == 0)
             {
-                foreach (var task in Factory.Tasks)
+                NeededTasks.Add(Factory.StartTask);
+                Factory.StartTask.NextTasks.Add(this);
+            }
+            if (NumbersNextTasks.Count == 0)
+            {
+                NextTasks.Add(Factory.EndTask);
+                Factory.EndTask.NeededTasks.Add(this);
+            }
+            foreach(var task in Factory.Tasks)
+            {
+                foreach(var number in NumbersNeededTasks)
                 {
-                    if (task.Number == numbeTask)
+                    if (task.Number == number)
                     {
-                        task.TaskEndPlanning += ExpectedTaskComplite;
                         NeededTasks.Add(task);
-                        ExpectedTasks.Add(task);
-                        break;
+                    }
+                }
+                foreach (var number in NumbersNextTasks)
+                {
+                    if (task.Number == number)
+                    {
+                        NextTasks.Add(task);
                     }
                 }
             }
-
         }
 
-        private void ExpectedTaskComplite(object? sender, TaskEventDescriptor e)
-        {
-            ExpectedTasks.Remove(e.Task);
-            TryStartPlanning();
-        }
-
-        private void TryStartPlanning()
+        public bool CanStartPlanning()
         {
             if (ExpectedTasks.Count == 0)
-            {
-                StartPlanning();
-            }
+                return true;
+            else
+                return false;
         }
 
-        private void StartPlanning()
+        public void StartPlanning()
         {
             Console.WriteLine($"Task №{Number} start pnannig");
 

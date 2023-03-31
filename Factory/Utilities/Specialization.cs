@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Utilities
 {
     internal class Specialization
     {
@@ -13,7 +13,7 @@ namespace Factory
 
         public Specialization() { }
 
-        public Specialization(string name, double complexity) 
+        public Specialization(string name, double complexity)
         {
             Name = name;
             Complexity = complexity;
