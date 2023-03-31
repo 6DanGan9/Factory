@@ -1,4 +1,5 @@
-﻿using Factory.Utilities;
+﻿using Factory.SubObjects;
+using Factory.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +10,29 @@ namespace Factory.Objects
 {
     internal class Task
     {
+        public string Name { get; set; }
         public int Number { get; private set; }
         public double LaborIntensity { get; private set; }
         public int MaxCountWorkers { get; private set; }
-        public DateTime StartTime { get; private set; }
-        public DateTime EndTime { get; private set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public TimeSpan FreeTime { get; set; }
+        public Worker Worker { get; set; }
+        public string NeededWorkdench { get; set; }
+
+        public bool IsPlanned = false;
         public List<Task> NeededTasks = new();
         private List<int> NumbersNeededTasks = new();
         public List<Task> NextTasks = new();
         private List<int> NumbersNextTasks = new();
-        public List<Task> ExpectedTasks = new();
         public Specialization NeededSpecialization = new();
-        public string NeededWorkdench;
-
-        public event EventHandler<TaskEventDescriptor> TaskEndPlanning;
 
         public Task()
         {
         }
         public Task(ExcelHelper excel, int row)
         {
+            Name = excel.Get(row, 1);
             Number = Convert.ToInt32(excel.Get(row, 2));
             MaxCountWorkers = Convert.ToInt32(excel.Get(row, 3));
             NeededWorkdench = excel.Get(row, 4);
@@ -75,12 +78,6 @@ namespace Factory.Objects
             Number = number;
         }
 
-        public void Start()
-        {
-            Console.WriteLine($"Task №{Number} has been pnanned");
-            TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
-        }
-
         public void Initialization()
         {
             if (NumbersNeededTasks.Count == 0)
@@ -93,9 +90,9 @@ namespace Factory.Objects
                 NextTasks.Add(Factory.EndTask);
                 Factory.EndTask.NeededTasks.Add(this);
             }
-            foreach(var task in Factory.Tasks)
+            foreach (var task in Factory.Tasks)
             {
-                foreach(var number in NumbersNeededTasks)
+                foreach (var number in NumbersNeededTasks)
                 {
                     if (task.Number == number)
                     {
@@ -114,52 +111,20 @@ namespace Factory.Objects
 
         public bool CanStartPlanning()
         {
-            if (ExpectedTasks.Count == 0)
-                return true;
-            else
-                return false;
+            foreach (var task in NeededTasks)
+            {
+                if (!task.IsPlanned)
+                    return false;
+            }
+            return true;
         }
 
-        public void StartPlanning()
+        internal void CalcStartTime()
         {
-            Console.WriteLine($"Task №{Number} start pnannig");
-
-            List<Worker> workers = CreateWorkersList();
-            List<Workbench> workbenches = CreateWorkbanchesList();
-            var sortedWorkers = workers.OrderBy(x => x.LastTime);
-            workers.Clear();
-            foreach (var worker in sortedWorkers)
-                workers.Add(worker);
-
-
-
-            Console.WriteLine($"Task №{Number} has been pnanned");
-            if (TaskEndPlanning != null)
-            {
-                TaskEndPlanning.Invoke(this, new TaskEventDescriptor { Task = this });
-            }
-        }
-
-        private List<Worker> CreateWorkersList()
-        {
-            List<Worker> workers = new();
-            foreach (var worker in Factory.Workers)
-            {
-                if (NeededSpecialization.CanUsed(worker.Specialization))
-                    workers.Add(worker);
-            }
-            return workers;
-        }
-
-        private List<Workbench> CreateWorkbanchesList()
-        {
-            List<Workbench> workbenches = new();
-            foreach (var workbench in Factory.Workbenches)
-            {
-                if (NeededWorkdench == workbench.Name)
-                    workbenches.Add(workbench);
-            }
-            return workbenches;
+            StartTime = Factory.StartDate;
+            foreach(var task in NeededTasks)
+                if (task.EndTime > StartTime)
+                    StartTime = task.EndTime;
         }
     }
 }

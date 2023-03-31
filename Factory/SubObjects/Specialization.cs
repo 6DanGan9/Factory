@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory.Utilities
+namespace Factory.SubObjects
 {
     internal class Specialization
     {

@@ -13,20 +13,25 @@ namespace Factory
     {
         public static void CreateTasksList()
         {
+            List<Task> Tasks = new();
             Factory.StartTask.SetNumber(0);
-            Factory.Tasks.Add(Factory.StartTask);
+            Tasks.Add(Factory.StartTask);
             ExcelHelper excel = new();
             excel.Open("Tasks");
             int row = 2;
             while (excel.Get(row, 1) != "")
             {
                 Task task = new(excel, row);
-                Factory.Tasks.Add(task);
+                Tasks.Add(task);
                 row++;
             }
             excel.Close();
-            for (int i = 1; i < Factory.Tasks.Count - 1; i++)
-                Factory.Tasks[i].Initialization();
+            Factory.EndTask.SetNumber(int.MaxValue);
+            Tasks.Add(Factory.EndTask);
+            Factory.Tasks = new Task[Tasks.Count];
+            Factory.Tasks = Tasks.ToArray();
+            for (int i = 1; i < Tasks.Count - 1; i++)
+                Tasks[i].Initialization();
         }
 
         public static void CreateWorkersList()
