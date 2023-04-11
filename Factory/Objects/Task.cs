@@ -1,5 +1,5 @@
-﻿using Factory.SubObjects;
-using Factory.Utilities;
+﻿using Factory.Utilities;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,19 +26,12 @@ namespace Factory.Objects
         /// Время, на которое может сместиться таска.
         /// </summary>
         public TimeSpan FreeTime { get; set; }
-        /// <summary>
-        /// Рабочий, выполняющий таску.
-        /// </summary>
-        public Worker Worker { get; set; }
         //необходимая специальность и квалифицированность рабочего.
         public Specialization NeededSpecialization = new();
         public string NeededWorkdench { get; set; }
 
-        public bool IsPlanned = false;
-        public List<Task> NeededTasks = new();
-        private List<int> NumbersNeededTasks = new();
-        public List<Task> NextTasks = new();
-        private List<int> NumbersNextTasks = new();
+        public List<int> NumbersNeededTasks = new();
+        public List<int> NumbersNextTasks = new();
 
         public Task()
         {
@@ -90,60 +83,10 @@ namespace Factory.Objects
         {
             Number = number;
         }
-        /// <summary>
-        /// Начальноя настройка таски создание печечня предшествующих и последующих тасок.
-        /// </summary>
-        public void Initialization()
+
+        internal void GetInfo()
         {
-            if (NumbersNeededTasks.Count == 0)
-            {
-                NeededTasks.Add(Factory.StartTask);
-                Factory.StartTask.NextTasks.Add(this);
-            }
-            if (NumbersNextTasks.Count == 0)
-            {
-                NextTasks.Add(Factory.EndTask);
-                Factory.EndTask.NeededTasks.Add(this);
-            }
-            foreach (var task in Factory.Tasks)
-            {
-                foreach (var number in NumbersNeededTasks)
-                {
-                    if (task.Number == number)
-                    {
-                        NeededTasks.Add(task);
-                    }
-                }
-                foreach (var number in NumbersNextTasks)
-                {
-                    if (task.Number == number)
-                    {
-                        NextTasks.Add(task);
-                    }
-                }
-            }
-        }
-        /// <summary>
-        /// Проверяет, все ли предшествующие таски запланированы.
-        /// </summary>
-        public bool CanStartPlanning()
-        {
-            foreach (var task in NeededTasks)
-            {
-                if (!task.IsPlanned)
-                    return false;
-            }
-            return true;
-        }
-        /// <summary>
-        /// Ищет наименьшее время, в которое может начаться выполнение.
-        /// </summary>
-        internal void CalcStartTime()
-        {
-            StartTime = Factory.StartDate;
-            foreach(var task in NeededTasks)
-                if (task.EndTime > StartTime)
-                    StartTime = task.EndTime;
+            Console.WriteLine($"[{Number}]{Name} ({StartTime} - {EndTime})\n");
         }
     }
 }

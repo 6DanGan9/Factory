@@ -1,4 +1,5 @@
-﻿using Factory.Objects;
+﻿using Factory.Agents;
+using Factory.Objects;
 using Factory.Utilities;
 using Microsoft.Office.Interop.Excel;
 using System;
@@ -13,11 +14,11 @@ namespace Factory
     internal static class Factory
     {
         public static DateTime StartDate = DateTime.Parse("1/03/2023 8:00:00");
-        public static List<Worker> Workers = new();
-        public static Task StartTask = new() { IsPlanned = true, EndTime = StartDate };
-        public static Task EndTask = new();
-        public static Task[] Tasks = Array.Empty<Task>();
-        public static List<Workbench> Workbenches = new();
+        public static TaskAgent[] Tasks;
+        public static TaskAgent StartTask => Tasks.First();
+        public static TaskAgent EndTask => Tasks.Last();
+        public static List<WorkerAgent> Workers = new();
+        public static List<WorkbenchAgent> Workbenches = new();
         public static TimeSpan WorkingDayLength = TimeSpan.FromHours(10);
 
         public static void CreateSchedule()
@@ -26,12 +27,33 @@ namespace Factory
             ObjectCreator.CreateWorkersList();
             ObjectCreator.CreateWorkbenchesList();
             Start();
+            GetInfo();
         }
-
 
         private static void Start()
         {
-            TaskAgent.TaskPlanning(EndTask);
+            Tasks.Last().TaskPlanning();
+        }
+
+        private static void GetInfo()
+        {
+            Console.WriteLine("Информация о тасках:");
+            for(int i = 1; i < Tasks.Length - 1; i++)
+            {
+                Tasks[i].GetInfo();
+            }
+            Console.WriteLine("==========================================================================================================================");
+            Console.WriteLine("Информация о рабочих:");
+            foreach (var worker in  Workers)
+            {
+                worker.GetInfo();
+            }
+            Console.WriteLine("==========================================================================================================================");
+            Console.WriteLine("Информация о рабочих столах:");
+            foreach (var workbench in Workbenches)
+            {
+                workbench.GetInfo();
+            }
         }
     }
 }

@@ -12,9 +12,18 @@ namespace Factory.Utilities
     internal static class TimeCalculator
     {
         /// <summary>
+        /// Возвращает момент времени, в который рабочий сможет выполнить заказ.
+        /// </summary>
+        public static DateTime CalcDateOfEndTask(Variant variant, double efficiency, List<DateTime> dates)
+        {
+            TimeSpan timeToCompliteTask;
+                timeToCompliteTask = TimeSpan.FromHours(variant.LaborIntensity / (efficiency * variant.WorkBoost));
+                return DateEndWork(variant.StartTime, timeToCompliteTask, dates);
+        }
+        /// <summary>
         /// Принимает время начала, длительность выполнения, и расписание рабочего, возвращает время, когда он закончит.
         /// </summary>
-        public static DateTime DateEndWork(DateTime start, TimeSpan timeToWork, List<DateTime> Dates)
+        private static DateTime DateEndWork(DateTime start, TimeSpan timeToWork, List<DateTime> Dates)
         {
             //Находим день, проверяем, успеет ли выполнить заказ рабочий в этот же день, если нет, то вычитаем этотдень и считаем пока на закончиться время.
             for (int i = 0; i < Dates.Count; i++)
@@ -40,72 +49,5 @@ namespace Factory.Utilities
                 }
             return DateTime.MinValue;
         }
-        /// <summary>
-        /// Возвращает момент времени, в который рабочий сможет выполнить заказ.
-        /// </summary>
-        public static DateTime CalcDateOfEndTask(Task task, Worker worker, Workbench workbench)
-        {
-            //Находим время, когда таска сможет начать выполнение.
-            task.CalcStartTime();
-            if (task.StartTime < worker.LastTime)
-            {
-                task.StartTime = worker.LastTime;
-            }
-            if(task.StartTime < workbench.LastTime)
-            {
-                task.StartTime = workbench.LastTime;
-            }
-            TimeSpan timeToCompliteTask;
-            //int neededWorkersCount = 0;
-            //double summEfficiency = 0;
-            //double summProgress = 0;
-            //else if (workers.Count == 1)
-            //{
-                timeToCompliteTask = TimeSpan.FromHours(task.LaborIntensity / (worker.Efficiency * workbench.WorkBoost));
-                return DateEndWork(task.StartTime, timeToCompliteTask, worker.Dates);
-            //}
-            //for (int i = 0; i < workers.Count - 1; i++)
-            //{
-            //    summEfficiency += workers[i].Efficiency * workbench.WorkBoost;
-            //    summProgress += summEfficiency * TimeToWork(workers[i], workers[i + 1]).TotalHours;
-            //    if (summProgress > task.LaborIntensity)
-            //    {
-            //        neededWorkersCount = i;
-            //        break;
-            //    }
-            //}
-            //if (neededWorkersCount > 0)
-            //{
-            //    timeToCompliteTask = TimeToWork(workers[0], workers[neededWorkersCount]) - TimeSpan.FromHours((summProgress - task.LaborIntensity) / summEfficiency);
-            //}
-            //else
-            //{
-            //    timeToCompliteTask = TimeSpan.FromHours((task.LaborIntensity - summProgress) / summEfficiency);
-            //}
-            //return timeToCompliteTask;
-        }
-
-        //private static TimeSpan TimeToWork(Worker worker1, Worker worker2)
-        //{
-        //    if (worker1.TimeToStart.Day == worker2.TimeToStart.Day)
-        //        return worker2.TimeToStart - worker1.TimeToStart;
-        //    else
-        //    {
-        //        int days;
-        //        DateTime Day1 = new();
-        //        foreach (var day in worker1.Dates)
-        //            if (worker1.TimeToStart.Day == day.Day)
-        //                Day1 = day;
-        //        TimeSpan timeToEndDay = Day1 + Factory.WorkingDayLength - worker1.TimeToStart;
-        //        DateTime Day2 = new();
-        //        foreach (var day in worker2.Dates)
-        //            if (worker1.TimeToStart.Day == day.Day)
-        //                Day2 = day;
-        //        TimeSpan timeFromStartDay = worker2.TimeToStart - Day2;
-        //        days = worker2.TimeToStart.Day - worker1.TimeToStart.Day - 1;
-        //        TimeSpan timeToWork = timeToEndDay + days * Factory.WorkingDayLength + timeFromStartDay;
-        //        return timeToWork;
-        //    }
-        //}
     }
 }

@@ -1,5 +1,4 @@
-﻿using Factory.SubObjects;
-using Factory.Utilities;
+﻿using Factory.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +11,7 @@ namespace Factory.Objects
     {
         public string Name { get; private set; }
         public double WorkBoost { get; private set; }
-        /// <summary>
-        /// Минимальное время, начиная с которого будет свободен.
-        /// </summary>
-        public DateTime LastTime { get { return Tasks.Last().EndTime; } }
         public List<DateTime> Dates = new();
-        public List<TaskToWork> Tasks = new();
 
         public Workbench() { }
 
@@ -31,15 +25,6 @@ namespace Factory.Objects
                 date = Convert.ToString(i) + "/03/2023 8:00:00";
                 Dates.Add(DateTime.Parse(date));
             }
-            Tasks.Add(new(0, Dates[0], Dates[0]));
-        }
-        /// <summary>
-        /// Принимает таску для выполнения.
-        /// </summary>
-        internal void AcceptTask(Task task)
-        {
-            TaskToWork subTask = new(task.Number, LastTime, task.EndTime);
-            Tasks.Add(subTask);
         }
     }
 }
