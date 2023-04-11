@@ -51,7 +51,7 @@ namespace Factory.Agents
                 {
                     case "CanWork":
                         var specialization = (Specialization)massage.Obj;
-                        if (specialization.Name == Worker.Specialization.Name && specialization.Complexity <= Worker.Specialization.Complexity)
+                        if (specialization.CanUsed(Worker.Specialization))
                         {
                             massage.From.MassBox.Enqueue(new Massage("Can", true, this, massage.From));
                         }

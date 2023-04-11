@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Agents
 {
     internal interface IAgent
     {
         public Queue<Massage> MassBox { get; set; }
-        public void CheckMassBox() 
+        public void CheckMassBox()
         {
 
         }

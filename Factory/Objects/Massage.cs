@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Factory.Agents;
 
 namespace Factory.Objects
 {
+    /// <summary>
+    /// Класс сообщения.
+    /// </summary>
     internal class Massage
     {
         public string Command { get; set; }

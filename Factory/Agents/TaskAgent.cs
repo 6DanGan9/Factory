@@ -87,6 +87,7 @@ namespace Factory.Agents
                 Console.WriteLine("Workbench hasn't been found");
                 throw new Exception();
             }
+            //Запрашиваем у рабочих, до какого времени они будут выполнять работу. 
             foreach (var worker in workers)
             {
                 CulcStartTime();
@@ -98,6 +99,7 @@ namespace Factory.Agents
                 worker.MassBox.Enqueue(new Massage("CulcTimeToComplite", variant, this, worker));
                 worker.CheckMassBox();
             }
+            //Находим наименьшее время и выбераем рабочего.
             DateTime minTime = MassBox.Min(x => (DateTime)x.Obj);
             while (MassBox.Count > 0)
             {
@@ -105,6 +107,7 @@ namespace Factory.Agents
                 if ((DateTime)mass.Obj == minTime)
                     MainWorker = (WorkerAgent)mass.From;
             }
+            //Записываем время окончиания работы и добавляем таску к рабочему и столу.
             MainTask.EndTime = minTime;
             MainWorker.MassBox.Enqueue(new Massage("AcceptTask", this, this, MainWorker));
             MainWorker.CheckMassBox();
@@ -112,7 +115,10 @@ namespace Factory.Agents
             MainWorkbench.CheckMassBox();
             IsPlanned = true;
         }
-
+        /// <summary>
+        /// Считает возможное время для смещения.
+        /// </summary>
+        /// <param name="Time"></param>
         public void CulcFreeTime(DateTime Time)
         {
             MainTask.FreeTime = Time - MainTask.EndTime;
@@ -200,7 +206,7 @@ namespace Factory.Agents
             var startTime = NeededTasks?.Max(x => x.EndTime) ?? Factory.StartDate;
             MainTask.StartTime = startTime;
         }
-
+        
         internal void GetInfo()
         {
             MainTask.GetInfo();
