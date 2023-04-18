@@ -1,4 +1,5 @@
-﻿using Factory.Objects;
+﻿using Factory.Interfaises;
+using Factory.Objects;
 using Factory.Utilities;
 using Microsoft.Office.Interop.Excel;
 using System;
@@ -96,7 +97,7 @@ namespace Factory.Agents
                 if (StartTime < worker.LastTime)
                     MainTask.StartTime = worker.LastTime;
                 Variant variant = new(MainTask.LaborIntensity, StartTime, MainWorkbench.WorkBoost);
-                worker.MassBox.Enqueue(new Massage("CulcTimeToComplite", variant, this, worker));
+                worker.AddMassage(new Massage("CulcTimeToComplite", variant, this, worker));
                 worker.CheckMassBox();
             }
             //Находим наименьшее время и выбераем рабочего.
@@ -109,11 +110,15 @@ namespace Factory.Agents
             }
             //Записываем время окончиания работы и добавляем таску к рабочему и столу.
             MainTask.EndTime = minTime;
-            MainWorker.MassBox.Enqueue(new Massage("AcceptTask", this, this, MainWorker));
+            MainWorker.AddMassage(new Massage("AcceptTask", this, this, MainWorker));
             MainWorker.CheckMassBox();
-            MainWorkbench.MassBox.Enqueue(new Massage("AcceptTask", this, this, MainWorkbench));
+            MainWorkbench.AddMassage(new Massage("AcceptTask", this, this, MainWorkbench));
             MainWorkbench.CheckMassBox();
             IsPlanned = true;
+        }
+        public void AddMassage(Massage massage)
+        {
+            MassBox.Enqueue(massage);
         }
         /// <summary>
         /// Считает возможное время для смещения.
@@ -177,7 +182,7 @@ namespace Factory.Agents
             List<WorkerAgent> workers = new();
             foreach (var worker in Factory.Workers)
             {
-                worker.MassBox.Enqueue(new Massage("CanWork", MainTask.NeededSpecialization, this, worker));
+                worker.AddMassage(new Massage("CanWork", MainTask.NeededSpecialization, this, worker));
                 worker.CheckMassBox();
             }
             while (MassBox.Count > 0)

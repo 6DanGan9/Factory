@@ -1,4 +1,5 @@
-﻿using Factory.Objects;
+﻿using Factory.Interfaises;
+using Factory.Objects;
 using Factory.Utilities;
 using System;
 using System.Collections.Generic;
@@ -41,6 +42,10 @@ namespace Factory.Agents
             }
             Console.WriteLine("\n");
         }
+        public void AddMassage(Massage massage)
+        {
+            MassBox.Enqueue(massage);
+        }
 
         internal void CheckMassBox()
         {
@@ -53,13 +58,13 @@ namespace Factory.Agents
                         var specialization = (Specialization)massage.Obj;
                         if (specialization.CanUsed(Worker.Specialization))
                         {
-                            massage.From.MassBox.Enqueue(new Massage("Can", true, this, massage.From));
+                            massage.From.AddMassage(new Massage("Can", true, this, massage.From));
                         }
                         break;
                     case "CulcTimeToComplite":
                         var variant = (Variant)massage.Obj;
                         DateTime TimeOfEnd = TimeCalculator.CalcDateOfEndTask(variant, Worker.Efficiency, Worker.Dates);
-                        massage.From.MassBox.Enqueue(new Massage("TimeOfEnd", TimeOfEnd, this, massage.From));
+                        massage.From.AddMassage(new Massage("TimeOfEnd", TimeOfEnd, this, massage.From));
                         break;
                     case "AcceptTask":
                         AcceptTask((TaskAgent)massage.Obj);

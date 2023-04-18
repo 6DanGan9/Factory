@@ -1,4 +1,5 @@
-﻿using Factory.Objects;
+﻿using Factory.Interfaises;
+using Factory.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +51,7 @@ namespace Factory.Agents
                         var name = (string)massage.Obj;
                         if (name == Workbench.Name)
                         {
-                            massage.From.MassBox.Enqueue(new Massage("Can", true, this, massage.From));
+                            massage.From.AddMassage(new Massage("Can", true, this, massage.From));
                         }
                         break;
                     case "AcceptTask":
@@ -58,6 +59,10 @@ namespace Factory.Agents
                         break;
                 }
             }
+        }
+        public void AddMassage(Massage massage)
+        {
+            MassBox.Enqueue(massage);
         }
     }
 }

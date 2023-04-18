@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Factory
+namespace Factory.Main
 {
     internal class Program
     {

@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using Task = Factory.Objects.Task;
 
-namespace Factory
+namespace Factory.Main
 {
     internal static class Factory
     {
@@ -38,13 +38,13 @@ namespace Factory
         private static void GetInfo()
         {
             Console.WriteLine("Информация о тасках:");
-            for(int i = 1; i < Tasks.Length - 1; i++)
+            for (int i = 1; i < Tasks.Length - 1; i++)
             {
                 Tasks[i].GetInfo();
             }
             Console.WriteLine("==========================================================================================================================");
             Console.WriteLine("Информация о рабочих:");
-            foreach (var worker in  Workers)
+            foreach (var worker in Workers)
             {
                 worker.GetInfo();
             }
