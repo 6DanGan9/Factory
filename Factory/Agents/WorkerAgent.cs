@@ -18,7 +18,7 @@ namespace Factory.Agents
         /// Минимальное время, начиная с которого будет свободен.
         /// </summary>
         public DateTime LastTime { get { return Tasks.Last().EndTime; } }
-        public List<TaskAgent> Tasks = new() { Factory.StartTask };
+        public List<TaskAgent> Tasks = new() { Main.Factory.StartTask };
 
         public WorkerAgent(Worker worker)
         {

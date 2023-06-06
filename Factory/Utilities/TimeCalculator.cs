@@ -29,18 +29,18 @@ namespace Factory.Utilities
             for (int i = 0; i < Dates.Count; i++)
                 if (Dates[i].Day == start.Day)
                 {
-                    if (Dates[i] + Factory.WorkingDayLength - start >= timeToWork)
+                    if (Dates[i] + Main.Factory.WorkingDayLength - start >= timeToWork)
                         return start + timeToWork;
                     else
                     {
-                        timeToWork -= Dates[i] + Factory.WorkingDayLength - start;
+                        timeToWork -= Dates[i] + Main.Factory.WorkingDayLength - start;
                         i++;
                         while (timeToWork > TimeSpan.Zero)
                         {
-                            if (timeToWork > Factory.WorkingDayLength)
+                            if (timeToWork > Main.Factory.WorkingDayLength)
                             {
                                 i++;
-                                timeToWork -= Factory.WorkingDayLength;
+                                timeToWork -= Main.Factory.WorkingDayLength;
                             }
                             else
                                 return Dates[i] + timeToWork;

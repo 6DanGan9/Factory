@@ -15,7 +15,7 @@ namespace Factory.Agents
         private Workbench Workbench { get; set; }
         public double WorkBoost { get { return Workbench.WorkBoost; } }
         public DateTime LastTime { get { return Tasks.Last().EndTime; } }
-        public List<TaskAgent> Tasks = new() { Factory.StartTask };
+        public List<TaskAgent> Tasks = new() { Main.Factory.StartTask };
 
         public WorkbenchAgent(Workbench workbench)
         {

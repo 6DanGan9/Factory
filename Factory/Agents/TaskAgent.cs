@@ -66,7 +66,7 @@ namespace Factory.Agents
         {
             Console.WriteLine(MainTask.Name);
             //Если это закрывающая таска, значит планирование окончено.
-            if (this == Factory.EndTask)
+            if (this == Main.Factory.EndTask)
             {
                 CulcStartTime();
                 //Считаем возможное смещение для предшествующих тасок.
@@ -148,15 +148,15 @@ namespace Factory.Agents
         {
             if (MainTask.NumbersNeededTasks.Count == 0)
             {
-                NeededTasks.Add(Factory.StartTask);
-                Factory.StartTask.NextTasks.Add(this);
+                NeededTasks.Add(Main.Factory.StartTask);
+                Main.Factory.StartTask.NextTasks.Add(this);
             }
             if (MainTask.NumbersNextTasks.Count == 0)
             {
-                NextTasks.Add(Factory.EndTask);
-                Factory.EndTask.NeededTasks.Add(this);
+                NextTasks.Add(Main.Factory.EndTask);
+                Main.Factory.EndTask.NeededTasks.Add(this);
             }
-            foreach (var task in Factory.Tasks)
+            foreach (var task in Main.Factory.Tasks)
             {
                 foreach (var number in MainTask.NumbersNeededTasks)
                 {
@@ -180,7 +180,7 @@ namespace Factory.Agents
         private List<WorkerAgent> CreateWorkersList()
         {
             List<WorkerAgent> workers = new();
-            foreach (var worker in Factory.Workers)
+            foreach (var worker in Main.Factory.Workers)
             {
                 worker.AddMassage(new Massage("CanWork", MainTask.NeededSpecialization, this, worker));
                 worker.CheckMassBox();
@@ -196,7 +196,7 @@ namespace Factory.Agents
         /// </summary>
         private WorkbenchAgent SearchWorkbench()
         {
-            foreach (var workbench in Factory.Workbenches)
+            foreach (var workbench in Main.Factory.Workbenches)
             {
                 workbench.MassBox.Enqueue(new Massage("CanWork", MainTask.NeededWorkdench, this, workbench));
                 workbench.CheckMassBox();
@@ -208,7 +208,7 @@ namespace Factory.Agents
         /// </summary>
         private void CulcStartTime()
         {
-            var startTime = NeededTasks?.Max(x => x.EndTime) ?? Factory.StartDate;
+            var startTime = NeededTasks?.Max(x => x.EndTime) ?? Main.Factory.StartDate;
             MainTask.StartTime = startTime;
         }
         

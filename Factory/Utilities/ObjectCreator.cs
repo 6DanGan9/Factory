@@ -14,7 +14,7 @@ namespace Factory
 {
     internal static class ObjectCreator
     {
-        public static Task StartTask = new() { EndTime = Factory.StartDate };
+        public static Task StartTask = new() { EndTime = Main.Factory.StartDate };
         public static Task EndTask = new();
         /// <summary>
         /// Считывает список тасок из Excel.
@@ -36,8 +36,8 @@ namespace Factory
             excel.Close();
             EndTask.SetNumber(int.MaxValue);
             Tasks.Add(new TaskAgent(EndTask));
-            Factory.Tasks = new TaskAgent[Tasks.Count];
-            Factory.Tasks = Tasks.ToArray();
+            Main.Factory.Tasks = new TaskAgent[Tasks.Count];
+            Main.Factory.Tasks = Tasks.ToArray();
             for (int i = 1; i < Tasks.Count - 1; i++)
                 Tasks[i].Initialization();
         }
@@ -52,7 +52,7 @@ namespace Factory
             while (excel.Get(row, 1) != "")
             {
                 Worker worker = new(excel, row);
-                Factory.Workers.Add(new WorkerAgent(worker));
+                Main.Factory.Workers.Add(new WorkerAgent(worker));
                 row++;
             }
             excel.Close();
@@ -68,7 +68,7 @@ namespace Factory
             while (excel.Get(row, 1) != "")
             {
                 Workbench workbench = new(excel, row);
-                Factory.Workbenches.Add(new WorkbenchAgent(workbench));
+                Main.Factory.Workbenches.Add(new WorkbenchAgent(workbench));
                 row++;
             }
             excel.Close();
